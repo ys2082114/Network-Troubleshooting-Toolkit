@@ -1,0 +1,30 @@
+# AppArmor profile for the Network Troubleshooting Toolkit
+#include <tunables/global>
+
+/home/**/network-toolkit/toolkit.sh {
+  # Common abstractions
+  #include <abstractions/base>
+  #include <abstractions/bash>
+  #include <abstractions/nameservice>
+  #include <abstractions/user-tmp>
+
+  # Read and execute access to toolkit files
+  /home/**/network-toolkit/** rix,
+
+  # Allow usage of networking tools
+  /usr/bin/ping rix,
+  /usr/bin/traceroute rix,
+  /usr/bin/nslookup rix,
+  /usr/bin/nmap rix,
+  /bin/hostname rix,
+  /sbin/ifconfig rix,
+  /usr/bin/ip rix,
+  /usr/bin/curl rix,
+
+  # Read DNS configuration
+  /etc/resolv.conf r,
+
+  # Allow needed network capabilities
+  capability net_raw,
+  capability net_admin,
+}
