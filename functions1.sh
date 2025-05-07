@@ -148,7 +148,7 @@ Install it using:
 sudo apt update && sudo apt install speedtest-cli"
     fi
 
-    whiptail --title "Speed Test Result" --scrolltext --msgbox "$result" 25 90
+    whiptail --title "Speed Test Result" --msgbox "$result" 15 90
 }
 
 
@@ -234,73 +234,74 @@ ufw_management() {
                [ "$PROTOCOL" -eq 2 ] && sudo ufw deny "$PORT"/udp
                whiptail --title "Rule Created" --msgbox "Rule added: $PORT" 12 70
            fi ;;
-       8)
-   RULE_LIST=$(sudo ufw status numbered | grep '^\[[0-9]\+]') 
+8)
+RULE_LIST=$(sudo ufw status numbered)
 
 if [ -z "$RULE_LIST" ]; then
-    whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
+    whiptail --title "No Rules" --msgbox "No valid rules were found to delete." 12 70
     return
 fi
 
-
-    MENU_ITEMS=()
-    while read -r line; do
-        if [[ "$line" =~ ^\[[0-9]+\] ]]; then
-            NUM=$(echo "$line" | sed -n 's/^\[\([0-9]\+\)\].*/\1/p')
-            DESC=$(echo "$line" | sed -n 's/^\[[0-9]\+\]\s*\(.*\)/\1/p')
-            MENU_ITEMS+=("$NUM" "$DESC")
-        fi
-    done <<< "$RULE_LIST"
-
-    if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
-        whiptail --title "No Rules" --msgbox "No valid rules were found to delete." 12 70
-        return
+MENU_ITEMS=()
+while IFS= read -r line; do
+    if [[ "$line" =~ ^\[[[:space:]]*([0-9]+)\] ]]; then
+        NUM=$(echo "$line" | sed -n 's/^\[[[:space:]]*\([0-9]\+\)\]\s*\(.*\)/\1/p')
+        DESC=$(echo "$line" | sed -n 's/^\[[[:space:]]*[0-9]\+\]\s*\(.*\)/\1/p')
+        MENU_ITEMS+=("$NUM" "$DESC")
     fi
+done <<< "$RULE_LIST"
 
-    RULE_NUM=$(whiptail --title "Delete Rule" --menu "Select a rule to delete:" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
-    echo "y" | sudo ufw delete "$RULE_NUM" && \
-        whiptail --title "Success" --msgbox "Rule [$RULE_NUM] deleted successfully!" 12 70
-    ;;
+if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
+    whiptail --title "No Rules" --msgbox "No rules found to delete." 12 70
+    return
+fi
+
+RULE_NUM=$(whiptail --title "Delete Rule" --menu "Select a rule to delete:" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
+
+echo "y" | sudo ufw delete "$RULE_NUM" && \
+    whiptail --title "Success" --msgbox "Rule [$RULE_NUM] deleted successfully!" 12 70
+
+;;
 9)
-   RULE_LIST=$(sudo ufw status numbered | grep '^\[[0-9]\+]') 
+RULE_LIST=$(sudo ufw status numbered)
 
 if [ -z "$RULE_LIST" ]; then
     whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
     return
 fi
 
-
-    MENU_ITEMS=()
-    while read -r line; do
-        if [[ "$line" =~ ^\[[0-9]+\] ]]; then
-            NUM=$(echo "$line" | sed -n 's/^\[\([0-9]\+\)\].*/\1/p')
-            DESC=$(echo "$line" | sed -n 's/^\[[0-9]\+\]\s*\(.*\)/\1/p')
-            MENU_ITEMS+=("$NUM" "$DESC")
-        fi
-    done <<< "$RULE_LIST"
-
-    if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
-        whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
-        return
+MENU_ITEMS=()
+while IFS= read -r line; do
+    if [[ "$line" =~ ^\[[[:space:]]*([0-9]+)\] ]]; then
+        NUM=$(echo "$line" | sed -n 's/^\[[[:space:]]*\([0-9]\+\)\]\s*\(.*\)/\1/p')
+        DESC=$(echo "$line" | sed -n 's/^\[[[:space:]]*[0-9]\+\]\s*\(.*\)/\1/p')
+        MENU_ITEMS+=("$NUM" "$DESC")
     fi
+done <<< "$RULE_LIST"
 
-    RULE_NUM=$(whiptail --title "Update Rule" --menu "Select a rule to update (it will be deleted):" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
-    echo "y" | sudo ufw delete "$RULE_NUM" || return
+if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
+    whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
+    return
+fi
 
-    ACTION=$(whiptail --title "New Action" --menu "Allow or Deny?" 20 70 2 "1" "Allow" "2" "Deny" 3>&1 1>&2 2>&3) || return
-    PROTOCOL=$(whiptail --title "Protocol" --menu "Select protocol:" 20 70 2 "1" "TCP" "2" "UDP" 3>&1 1>&2 2>&3) || return
-    PORT=$(whiptail --title "Port" --inputbox "Enter new port number:" 12 70 3>&1 1>&2 2>&3) || return
+RULE_NUM=$(whiptail --title "Update Rule" --menu "Select a rule to update (it will be deleted):" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
 
-    if [ "$ACTION" -eq 1 ]; then
-        [ "$PROTOCOL" -eq 1 ] && sudo ufw allow "$PORT"/tcp
-        [ "$PROTOCOL" -eq 2 ] && sudo ufw allow "$PORT"/udp
-        whiptail --title "Rule Updated" --msgbox "Rule updated: Allow $PORT" 12 70
-    else
-        [ "$PROTOCOL" -eq 1 ] && sudo ufw deny "$PORT"/tcp
-        [ "$PROTOCOL" -eq 2 ] && sudo ufw deny "$PORT"/udp
-        whiptail --title "Rule Updated" --msgbox "Rule updated: Deny $PORT" 12 70
-    fi
-    ;;
+echo "y" | sudo ufw delete "$RULE_NUM" || return
+
+ACTION=$(whiptail --title "New Action" --menu "Allow or Deny?" 20 70 2 "1" "Allow" "2" "Deny" 3>&1 1>&2 2>&3) || return
+PROTOCOL=$(whiptail --title "Protocol" --menu "Select protocol:" 20 70 2 "1" "TCP" "2" "UDP" 3>&1 1>&2 2>&3) || return
+PORT=$(whiptail --title "Port" --inputbox "Enter new port number:" 12 70 3>&1 1>&2 2>&3) || return
+
+if [ "$ACTION" -eq 1 ]; then
+    [ "$PROTOCOL" -eq 1 ] && sudo ufw allow "$PORT"/tcp
+    [ "$PROTOCOL" -eq 2 ] && sudo ufw allow "$PORT"/udp
+    whiptail --title "Rule Updated" --msgbox "Rule updated: Allow $PORT" 12 70
+else
+    [ "$PROTOCOL" -eq 1 ] && sudo ufw deny "$PORT"/tcp
+    [ "$PROTOCOL" -eq 2 ] && sudo ufw deny "$PORT"/udp
+    whiptail --title "Rule Updated" --msgbox "Rule updated: Deny $PORT" 12 70
+fi
+;;
 
         0) return ;;
     esac

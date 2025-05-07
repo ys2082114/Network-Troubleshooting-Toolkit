@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load functions from external file
-source ./functions.sh
+source ./functions1.sh
 
 # ========== Main Menu Loop ==========
 while true; do
