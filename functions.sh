@@ -404,7 +404,7 @@ logs_management() {
             whiptail --title "Search Results" --scrolltext --textbox /tmp/search_results.txt 25 80
             ;;
         7)
-            LOG_FILE="logs/toolkit_history.log"
+            LOG_FILE="logs/toolkit.log"
             if [ -f "$LOG_FILE" ]; then
                 whiptail --title "Toolkit Logs" --scrolltext --textbox "$LOG_FILE" 25 80
             else
