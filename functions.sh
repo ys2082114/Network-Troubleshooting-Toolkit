@@ -1,7 +1,24 @@
 #!/bin/bash
 
+# Function for logging user activity
+log_toolkit_activity() {
+    LOG_DIR="./logs"
+    MAIN_LOG_FILE="$LOG_DIR/toolkit.log"
+    DATE_LOG_FILE="$LOG_DIR/$(date +%Y-%m-%d).log"
+
+    mkdir -p "$LOG_DIR"
+    
+    TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+    LOG_MSG="[$TIMESTAMP] $1"
+
+    echo "$LOG_MSG" >> "$MAIN_LOG_FILE"
+    echo "$LOG_MSG" >> "$DATE_LOG_FILE"
+}
+
+
 # Function for Quick Network Diagnostics
 quick_diagnostics() {
+    log_toolkit_activity "User used Quick Network Diagnostics"
     echo "Performing quick network diagnostics..." > /tmp/quick_diag.txt
 
     # Hostname and IP
@@ -65,6 +82,7 @@ quick_diagnostics() {
 
 # Function to show Hostname and IP Address
 show_hostname_ip() {
+    log_toolkit_activity "User checked Hostname and IP"
     output="Hostname: $(hostname)\n"
     output+="IP Address: $(hostname -I | awk '{print $1}')"
     whiptail --title "Hostname and IP" --msgbox "$output" 10 60
@@ -72,12 +90,14 @@ show_hostname_ip() {
 
 # Function to show Default Gateway
 show_default_gateway() {
+    log_toolkit_activity "User checked Default Gateway"
     output="Default Gateway: $(ip route | grep default | awk '{print $3}')"
     whiptail --title "Default Gateway" --msgbox "$output" 10 60
 }
 
 # Function for DNS Lookup
 dns_lookup() {
+    log_toolkit_activity "User performed DNS Lookup"
     IP=$(nslookup google.com | grep -E 'Address: [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | awk '{print $2}' | head -n 1)
     whiptail --title "DNS Lookup Result" --msgbox "DNS Lookup for google.com (IPv4): $IP" 10 60
 }
@@ -86,6 +106,7 @@ dns_lookup() {
 ping_host() {
     HOST=$(whiptail --inputbox "Enter host to ping:" 10 60 "google.com" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
+        log_toolkit_activity "User pinged host: $HOST"
         echo "Pinging $HOST..." > /tmp/ping_output.txt
         ping -c 4 "$HOST" >> /tmp/ping_output.txt 2>&1
         whiptail --title "Ping Result for $HOST" --scrolltext --textbox /tmp/ping_output.txt 25 80
@@ -96,6 +117,7 @@ ping_host() {
 traceroute_host() {
     HOST=$(whiptail --inputbox "Enter host to traceroute:" 10 60 "google.com" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
+	log_toolkit_activity "User performed traceroute to: $HOST"
         echo "Tracerouting to $HOST..." > /tmp/traceroute_output.txt
         traceroute "$HOST" >> /tmp/traceroute_output.txt 2>&1
         whiptail --title "Traceroute to $HOST" --scrolltext --textbox /tmp/traceroute_output.txt 25 80
@@ -104,24 +126,28 @@ traceroute_host() {
 
 # Function to show Disk Usage
 show_disk_usage() {
+    log_toolkit_activity "User viewed Disk Usage"
     df -h > /tmp/disk_usage.txt
     whiptail --title "Disk Usage" --scrolltext --textbox /tmp/disk_usage.txt 25 80
 }
 
 # Function to show System Uptime
 show_uptime() {
+    log_toolkit_activity "User viewed System Uptime"
     result=$(uptime)
     whiptail --title "System Uptime" --msgbox "$result" 10 60
 }
 
 # Function to show Network Interfaces
 show_network_interfaces() {
+    log_toolkit_activity "User viewed Network Interfaces"
     ifconfig -a > /tmp/interfaces.txt
     whiptail --title "Network Interfaces" --scrolltext --textbox /tmp/interfaces.txt 25 80
 }
 
 # Function to perform Speed Test
 speed_test() {
+    log_toolkit_activity "User ran speed test"
     if command -v speedtest-cli &>/dev/null; then
         result=$(speedtest-cli --simple 2>&1)
 
@@ -148,7 +174,7 @@ Install it using:
 sudo apt update && sudo apt install speedtest-cli"
     fi
 
-    whiptail --title "Speed Test Result" --scrolltext --msgbox "$result" 25 90
+    whiptail --title "Speed Test Result" --msgbox "$result" 15 90
 }
 
 
@@ -157,6 +183,7 @@ sudo apt update && sudo apt install speedtest-cli"
 port_scan() {
     HOST=$(whiptail --inputbox "Enter host to scan for open ports:" 10 60 "localhost" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
+        log_toolkit_activity "User performed port scan on: $HOST"
         nmap "$HOST" > /tmp/portscan_output.txt 2>&1
         whiptail --title "Port Scan for $HOST" --scrolltext --textbox /tmp/portscan_output.txt 25 80
     fi
@@ -164,12 +191,14 @@ port_scan() {
 
 # Function to show ARP Table
 show_arp_table() {
+    log_toolkit_activity "User checked ARP table"
     arp -a > /tmp/arp_table.txt
     whiptail --title "ARP Table" --scrolltext --textbox /tmp/arp_table.txt 20 80
 }
 
 # Function to check Public IP
 check_public_ip() {
+    log_toolkit_activity "User checked public IP Address"
     ip=$(curl -s ifconfig.me)
     whiptail --title "Public IP Address" --msgbox "Public IP Address: $ip" 10 60
 }
@@ -178,6 +207,7 @@ check_public_ip() {
 whois_lookup() {
     DOMAIN=$(whiptail --inputbox "Enter domain to perform WHOIS lookup:" 10 60 "google.com" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
+   	log_toolkit_activity "User performed WHOIS lookup on: $DOMAIN"
         whois "$DOMAIN" > /tmp/whois_output.txt 2>&1
         whiptail --title "WHOIS for $DOMAIN" --scrolltext --textbox /tmp/whois_output.txt 25 80
     fi
@@ -185,12 +215,14 @@ whois_lookup() {
 
 # Function to check AppArmor Status
 apparmor_status() {
+    log_toolkit_activity "User checked AppArmor Status"
     sudo apparmor_status > /tmp/apparmor_output.txt 2>&1
     whiptail --title "AppArmor Status" --scrolltext --textbox /tmp/apparmor_output.txt 25 80
 }
 
 # Function for Firewall Management (UFW)
 ufw_management() {
+    log_toolkit_activity "User checked UFW and its rules"
     ACTION=$(whiptail --title "Firewall Management (UFW)" \
     --menu "Select an action:" 20 70 10 \
     "1" "Enable UFW" \
@@ -234,73 +266,74 @@ ufw_management() {
                [ "$PROTOCOL" -eq 2 ] && sudo ufw deny "$PORT"/udp
                whiptail --title "Rule Created" --msgbox "Rule added: $PORT" 12 70
            fi ;;
-       8)
-   RULE_LIST=$(sudo ufw status numbered | grep '^\[[0-9]\+]') 
+8)
+RULE_LIST=$(sudo ufw status numbered)
 
 if [ -z "$RULE_LIST" ]; then
-    whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
+    whiptail --title "No Rules" --msgbox "No valid rules were found to delete." 12 70
     return
 fi
 
-
-    MENU_ITEMS=()
-    while read -r line; do
-        if [[ "$line" =~ ^\[[0-9]+\] ]]; then
-            NUM=$(echo "$line" | sed -n 's/^\[\([0-9]\+\)\].*/\1/p')
-            DESC=$(echo "$line" | sed -n 's/^\[[0-9]\+\]\s*\(.*\)/\1/p')
-            MENU_ITEMS+=("$NUM" "$DESC")
-        fi
-    done <<< "$RULE_LIST"
-
-    if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
-        whiptail --title "No Rules" --msgbox "No valid rules were found to delete." 12 70
-        return
+MENU_ITEMS=()
+while IFS= read -r line; do
+    if [[ "$line" =~ ^\[[[:space:]]*([0-9]+)\] ]]; then
+        NUM=$(echo "$line" | sed -n 's/^\[[[:space:]]*\([0-9]\+\)\]\s*\(.*\)/\1/p')
+        DESC=$(echo "$line" | sed -n 's/^\[[[:space:]]*[0-9]\+\]\s*\(.*\)/\1/p')
+        MENU_ITEMS+=("$NUM" "$DESC")
     fi
+done <<< "$RULE_LIST"
 
-    RULE_NUM=$(whiptail --title "Delete Rule" --menu "Select a rule to delete:" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
-    echo "y" | sudo ufw delete "$RULE_NUM" && \
-        whiptail --title "Success" --msgbox "Rule [$RULE_NUM] deleted successfully!" 12 70
-    ;;
+if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
+    whiptail --title "No Rules" --msgbox "No rules found to delete." 12 70
+    return
+fi
+
+RULE_NUM=$(whiptail --title "Delete Rule" --menu "Select a rule to delete:" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
+
+echo "y" | sudo ufw delete "$RULE_NUM" && \
+    whiptail --title "Success" --msgbox "Rule [$RULE_NUM] deleted successfully!" 12 70
+
+;;
 9)
-   RULE_LIST=$(sudo ufw status numbered | grep '^\[[0-9]\+]') 
+RULE_LIST=$(sudo ufw status numbered)
 
 if [ -z "$RULE_LIST" ]; then
     whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
     return
 fi
 
-
-    MENU_ITEMS=()
-    while read -r line; do
-        if [[ "$line" =~ ^\[[0-9]+\] ]]; then
-            NUM=$(echo "$line" | sed -n 's/^\[\([0-9]\+\)\].*/\1/p')
-            DESC=$(echo "$line" | sed -n 's/^\[[0-9]\+\]\s*\(.*\)/\1/p')
-            MENU_ITEMS+=("$NUM" "$DESC")
-        fi
-    done <<< "$RULE_LIST"
-
-    if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
-        whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
-        return
+MENU_ITEMS=()
+while IFS= read -r line; do
+    if [[ "$line" =~ ^\[[[:space:]]*([0-9]+)\] ]]; then
+        NUM=$(echo "$line" | sed -n 's/^\[[[:space:]]*\([0-9]\+\)\]\s*\(.*\)/\1/p')
+        DESC=$(echo "$line" | sed -n 's/^\[[[:space:]]*[0-9]\+\]\s*\(.*\)/\1/p')
+        MENU_ITEMS+=("$NUM" "$DESC")
     fi
+done <<< "$RULE_LIST"
 
-    RULE_NUM=$(whiptail --title "Update Rule" --menu "Select a rule to update (it will be deleted):" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
-    echo "y" | sudo ufw delete "$RULE_NUM" || return
+if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
+    whiptail --title "No Rules" --msgbox "No valid rules were found to update." 12 70
+    return
+fi
 
-    ACTION=$(whiptail --title "New Action" --menu "Allow or Deny?" 20 70 2 "1" "Allow" "2" "Deny" 3>&1 1>&2 2>&3) || return
-    PROTOCOL=$(whiptail --title "Protocol" --menu "Select protocol:" 20 70 2 "1" "TCP" "2" "UDP" 3>&1 1>&2 2>&3) || return
-    PORT=$(whiptail --title "Port" --inputbox "Enter new port number:" 12 70 3>&1 1>&2 2>&3) || return
+RULE_NUM=$(whiptail --title "Update Rule" --menu "Select a rule to update (it will be deleted):" 20 90 10 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3) || return
 
-    if [ "$ACTION" -eq 1 ]; then
-        [ "$PROTOCOL" -eq 1 ] && sudo ufw allow "$PORT"/tcp
-        [ "$PROTOCOL" -eq 2 ] && sudo ufw allow "$PORT"/udp
-        whiptail --title "Rule Updated" --msgbox "Rule updated: Allow $PORT" 12 70
-    else
-        [ "$PROTOCOL" -eq 1 ] && sudo ufw deny "$PORT"/tcp
-        [ "$PROTOCOL" -eq 2 ] && sudo ufw deny "$PORT"/udp
-        whiptail --title "Rule Updated" --msgbox "Rule updated: Deny $PORT" 12 70
-    fi
-    ;;
+echo "y" | sudo ufw delete "$RULE_NUM" || return
+
+ACTION=$(whiptail --title "New Action" --menu "Allow or Deny?" 20 70 2 "1" "Allow" "2" "Deny" 3>&1 1>&2 2>&3) || return
+PROTOCOL=$(whiptail --title "Protocol" --menu "Select protocol:" 20 70 2 "1" "TCP" "2" "UDP" 3>&1 1>&2 2>&3) || return
+PORT=$(whiptail --title "Port" --inputbox "Enter new port number:" 12 70 3>&1 1>&2 2>&3) || return
+
+if [ "$ACTION" -eq 1 ]; then
+    [ "$PROTOCOL" -eq 1 ] && sudo ufw allow "$PORT"/tcp
+    [ "$PROTOCOL" -eq 2 ] && sudo ufw allow "$PORT"/udp
+    whiptail --title "Rule Updated" --msgbox "Rule updated: Allow $PORT" 12 70
+else
+    [ "$PROTOCOL" -eq 1 ] && sudo ufw deny "$PORT"/tcp
+    [ "$PROTOCOL" -eq 2 ] && sudo ufw deny "$PORT"/udp
+    whiptail --title "Rule Updated" --msgbox "Rule updated: Deny $PORT" 12 70
+fi
+;;
 
         0) return ;;
     esac
@@ -311,8 +344,10 @@ fi
 
 # Function for Static IP Setup
 static_ip_setup() {
+    log_toolkit_activity "User used Static IP Setup"
     INTERFACE=$(whiptail --inputbox "Enter network interface (e.g., eth0, wlan0):" 10 60 "eth0" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
+	
         IP_ADDRESS=$(whiptail --inputbox "Enter static IP address:" 10 60 "192.168.1.100" 3>&1 1>&2 2>&3)
         NETMASK=$(whiptail --inputbox "Enter netmask:" 10 60 "255.255.255.0" 3>&1 1>&2 2>&3)
         GATEWAY=$(whiptail --inputbox "Enter default gateway:" 10 60 "192.168.1.1" 3>&1 1>&2 2>&3)
@@ -329,21 +364,55 @@ static_ip_setup() {
 
 # Function for Logs Management
 logs_management() {
+    log_toolkit_activity "User checked logs"
     OPTION=$(whiptail --title "Logs Management" \
-    --menu "Choose a log to manage:" 15 60 5 \
+    --menu "Choose a log to manage:" 15 60 7 \
     "1" "Show Syslog" \
     "2" "Show Auth.log" \
     "3" "Clear Syslog" \
     "4" "Clear Auth.log" \
+    "5" "Export Syslog" \
+    "6" "Search Syslog" \
+    "7" "Show Toolkit Usage Logs" \
     "0" "Back" 3>&1 1>&2 2>&3)
 
     case $OPTION in
-        1) tail -n 30 /var/log/syslog > /tmp/syslog.txt
-           whiptail --title "Syslog" --scrolltext --textbox /tmp/syslog.txt 25 80 ;;
-        2) tail -n 30 /var/log/auth.log > /tmp/authlog.txt
-           whiptail --title "Auth Log" --scrolltext --textbox /tmp/authlog.txt 25 80 ;;
-        3) sudo truncate -s 0 /var/log/syslog ;;
-        4) sudo truncate -s 0 /var/log/auth.log ;;
-        0) ;;
+        1)
+            tail -n 30 /var/log/syslog > /tmp/syslog.txt
+            whiptail --title "Syslog" --scrolltext --textbox /tmp/syslog.txt 25 80
+            ;;
+        2)
+            tail -n 30 /var/log/auth.log > /tmp/authlog.txt
+            whiptail --title "Auth Log" --scrolltext --textbox /tmp/authlog.txt 25 80
+            ;;
+        3)
+            sudo truncate -s 0 /var/log/syslog
+            whiptail --title "Clear Syslog" --msgbox "Syslog has been cleared." 10 60
+            ;;
+        4)
+            sudo truncate -s 0 /var/log/auth.log
+            whiptail --title "Clear Auth.log" --msgbox "Auth.log has been cleared." 10 60
+            ;;
+        5)
+            EXPORT_PATH=$(whiptail --inputbox "Enter the full path to save the exported syslog:" 10 60 "/home/user/exported_syslog.log" 3>&1 1>&2 2>&3)
+            cp /var/log/syslog "$EXPORT_PATH"
+            whiptail --title "Export Success" --msgbox "Syslog has been exported to $EXPORT_PATH" 10 60
+            ;;
+        6)
+            SEARCH_TERM=$(whiptail --inputbox "Enter the search term:" 10 60 3>&1 1>&2 2>&3)
+            grep "$SEARCH_TERM" /var/log/syslog > /tmp/search_results.txt
+            whiptail --title "Search Results" --scrolltext --textbox /tmp/search_results.txt 25 80
+            ;;
+        7)
+            LOG_FILE="logs/toolkit_history.log"
+            if [ -f "$LOG_FILE" ]; then
+                whiptail --title "Toolkit Logs" --scrolltext --textbox "$LOG_FILE" 25 80
+            else
+                whiptail --msgbox "No toolkit logs found." 10 60
+            fi
+            ;;
+        0)
+            return
+            ;;
     esac
 }
