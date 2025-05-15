@@ -1,7 +1,8 @@
 # Network-Troubleshooting-Toolkit
 A Linux-based TUI shell-script project for troubleshooting your network using Whiptail.
 
-How to use this project?
+## How to use this project?
+
 (1) Clone this project or download its zip file.
 
 (2) Run install.sh as './install.sh' in your Linux terminak (preferably Ubuntu or related distros). This will install all libraries that are required for running the main file in your terminal.
