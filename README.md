@@ -14,4 +14,4 @@ A Linux-based TUI shell-script project for troubleshooting your network using Wh
 (5) There is also a logs option in the main menu with which you can see your toolkit usage logs - one is toolkit.log (which has all the logs of the toolkit usage), and the others are based on the toolkit usage according to date which will be automatically created every day you use this toolkit. These are available in the logs/ directory in the same folder.
 
 
-**P.S: In case, you make a wrong network setting while using this app, you can run './network_reset.sh' to revert back to normal settings in your Linux system.**
+**P.S.: In case, you make a wrong network setting while using this app, you can run './network_reset.sh' to revert back to normal settings in your Linux system.**
