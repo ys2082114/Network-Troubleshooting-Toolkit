@@ -20,6 +20,8 @@ install_dependencies() {
         iproute2 \
         apparmor \
         bash-completion \
+	net-tools \
+	whois \
         tree
 
     if [ $? -eq 0 ]; then
