@@ -7,3 +7,92 @@
 [2025-05-13 22:18:56] User checked logs
 [2025-05-13 22:19:05] User checked logs
 [2025-05-13 22:23:54] User checked logs
+[2025-05-14 15:23:56] User used Quick Network Diagnostics
+[2025-05-14 15:26:28] User checked Hostname and IP
+[2025-05-14 15:26:30] User checked Default Gateway
+[2025-05-14 15:26:33] User performed DNS Lookup
+[2025-05-14 15:26:39] User pinged host: google.com
+[2025-05-14 15:26:48] User performed DNS Lookup
+[2025-05-14 15:26:51] User performed DNS Lookup
+[2025-05-14 15:28:33] User pinged host: leetcode.com
+[2025-05-14 15:28:51] User performed traceroute to: google.com
+[2025-05-14 15:30:18] User checked logs
+[2025-05-14 15:30:25] User checked logs
+[2025-05-14 15:32:56] User checked logs
+[2025-05-14 15:33:22] User performed traceroute to: google.com
+[2025-05-14 15:35:14] User performed traceroute to: google.com
+[2025-05-14 15:36:28] User viewed Disk Usage
+[2025-05-14 15:36:35] User viewed System Uptime
+[2025-05-14 15:36:39] User viewed Network Interfaces
+[2025-05-14 15:39:43] User viewed Network Interfaces
+[2025-05-14 15:39:47] User ran speed test
+[2025-05-14 15:40:44] User used Quick Network Diagnostics
+[2025-05-14 15:41:58] User viewed Network Interfaces
+[2025-05-14 15:42:13] User ran speed test
+[2025-05-14 15:42:44] User performed port scan on: localhost
+[2025-05-14 15:43:57] User performed port scan on: localhost
+[2025-05-14 15:44:03] User checked AppArmor Status
+[2025-05-14 15:44:07] User checked ARP table
+[2025-05-14 15:45:46] User checked public IP Address
+[2025-05-14 15:46:00] User performed WHOIS lookup on: leetcode.com
+[2025-05-14 15:47:01] User performed WHOIS lookup on: leetcode.com
+[2025-05-14 15:47:59] User performed traceroute to: leetcode.com
+[2025-05-14 15:48:31] User checked AppArmor Status
+[2025-05-14 15:49:11] User checked UFW and its rules
+[2025-05-14 15:49:20] User checked logs
+[2025-05-14 15:49:26] User checked logs
+[2025-05-14 15:49:33] User checked logs
+[2025-05-14 15:49:51] User checked logs
+[2025-05-14 15:50:01] User checked logs
+[2025-05-14 15:50:26] User checked logs
+[2025-05-14 15:57:37] User used Quick Network Diagnostics
+[2025-05-14 15:57:46] User performed traceroute to: google.com
+[2025-05-14 15:57:54] User viewed Network Interfaces
+[2025-05-14 15:58:01] User checked ARP table
+[2025-05-14 15:58:06] User performed port scan on: localhost
+[2025-05-14 15:58:14] User checked ARP table
+[2025-05-14 15:58:19] User performed WHOIS lookup on: google.com
+[2025-05-14 16:00:08] User used Quick Network Diagnostics
+[2025-05-14 16:00:17] User used Quick Network Diagnostics
+[2025-05-14 16:00:38] User performed traceroute to: google.com
+[2025-05-14 16:00:47] User viewed Network Interfaces
+[2025-05-14 16:00:55] User performed port scan on: localhost
+[2025-05-14 16:00:59] User checked ARP table
+[2025-05-14 16:01:04] User performed WHOIS lookup on: google.com
+[2025-05-14 16:01:35] User checked logs
+[2025-05-14 16:05:23] User used Quick Network Diagnostics
+[2025-05-14 16:07:14] User used Static IP Setup
+[2025-05-14 16:07:34] User checked UFW and its rules
+[2025-05-14 16:07:40] User viewed Network Interfaces
+[2025-05-14 16:07:57] User checked UFW and its rules
+[2025-05-14 16:08:02] User checked UFW and its rules
+[2025-05-14 16:08:14] User checked UFW and its rules
+[2025-05-14 16:08:20] User checked UFW and its rules
+[2025-05-14 16:08:26] User checked UFW and its rules
+[2025-05-14 16:08:30] User checked UFW and its rules
+[2025-05-14 16:08:35] User checked UFW and its rules
+[2025-05-14 16:08:44] User checked UFW and its rules
+[2025-05-14 16:08:49] User checked UFW and its rules
+[2025-05-14 16:09:03] User checked UFW and its rules
+[2025-05-14 16:09:17] User checked UFW and its rules
+[2025-05-14 16:09:24] User checked UFW and its rules
+[2025-05-14 16:09:31] User checked UFW and its rules
+[2025-05-14 16:09:35] User checked UFW and its rules
+[2025-05-14 16:09:40] User checked UFW and its rules
+[2025-05-14 16:09:46] User checked AppArmor Status
+[2025-05-14 16:09:53] User checked logs
+[2025-05-14 16:34:02] User used Quick Network Diagnostics
+[2025-05-14 16:34:33] User checked UFW and its rules
+[2025-05-14 16:34:53] User checked UFW and its rules
+[2025-05-14 16:35:02] User pinged host: google.com
+[2025-05-14 16:35:09] User checked AppArmor Status
+[2025-05-14 16:35:20] User used Static IP Setup
+[2025-05-14 16:36:05] User checked logs
+[2025-05-14 16:36:09] User checked UFW and its rules
+[2025-05-14 16:36:21] User used Static IP Setup
+[2025-05-14 16:36:36] User checked UFW and its rules
+[2025-05-14 16:46:58] User checked UFW and its rules
+[2025-05-14 16:47:03] User checked UFW and its rules
+[2025-05-14 16:47:06] User checked UFW and its rules
+[2025-05-14 16:47:09] User checked UFW and its rules
+[2025-05-14 16:47:17] User checked UFW and its rules
