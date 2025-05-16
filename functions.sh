@@ -34,18 +34,18 @@ quick_diagnostics() {
     # Internet Connectivity
     echo -e "\n--- Internet Connectivity ---" >> /tmp/quick_diag.txt
     if ping -c 1 -W 2 8.8.8.8 &> /dev/null; then
-        echo "✔ Internet appears to be working (Ping to 8.8.8.8 successful)" >> /tmp/quick_diag.txt
+        echo "Internet appears to be working (Ping to 8.8.8.8 successful)" >> /tmp/quick_diag.txt
     else
-        echo "✘ Cannot reach 8.8.8.8 — possible internet issue" >> /tmp/quick_diag.txt
+        echo "Cannot reach 8.8.8.8 — possible internet issue" >> /tmp/quick_diag.txt
     fi
 
     # DNS Resolution
     echo -e "\n--- DNS Lookup (google.com) ---" >> /tmp/quick_diag.txt
     DIG=$(dig google.com +short 2>/dev/null)
     if [ -n "$DIG" ]; then
-        echo "✔ DNS working: google.com resolves to $DIG" >> /tmp/quick_diag.txt
+        echo "DNS working: google.com resolves to $DIG" >> /tmp/quick_diag.txt
     else
-        echo "✘ DNS resolution failed. Try checking /etc/resolv.conf or try another DNS." >> /tmp/quick_diag.txt
+        echo "DNS resolution failed. Try checking /etc/resolv.conf or try another DNS." >> /tmp/quick_diag.txt
     fi
 
     # Public IP
@@ -54,7 +54,7 @@ quick_diagnostics() {
     if [ -n "$PUBLIC_IP" ]; then
         echo "Your public IP is: $PUBLIC_IP" >> /tmp/quick_diag.txt
     else
-        echo "✘ Failed to fetch public IP. Possible DNS or internet issue." >> /tmp/quick_diag.txt
+        echo "Failed to fetch public IP. Possible DNS or internet issue." >> /tmp/quick_diag.txt
     fi
 
     # Speed Test (if tool is installed)
@@ -152,7 +152,7 @@ speed_test() {
         result=$(speedtest-cli --simple 2>&1)
 
         if echo "$result" | grep -qE "Temporary failure in name resolution|403|Cannot retrieve"; then
-            result="✘ Speedtest failed due to DNS or access issues.
+            result="Speedtest failed due to DNS or access issues.
 
 Suggestions:
 - Check your internet connection.
@@ -160,7 +160,7 @@ Suggestions:
 - Try running: sudo systemctl restart NetworkManager
 "
         elif ! echo "$result" | grep -q "Download"; then
-            result="✘ Speedtest did not return expected results.
+            result="Speedtest did not return expected results.
 
 Suggestions:
 - Ensure you're connected to the internet.
